@@ -1,0 +1,38 @@
+# порт и адрес интерфейса на котором будет работать сервис
+listen_addr: ":8080"
+
+processing:
+  # имя ResourceQuota по умолчанию
+  default_resource_quota_name: cap-resource
+
+  # процент удержания ресурсов на внутренние сервисы контура
+  infra_fee: 15
+
+  # переподписка по ЦПУ
+  cpu_oversubscription: 3
+
+  # список колонн для инфраструктурных сервисов
+  infra_customers: 
+  - corp
+  - infrastructure
+
+  # поле в аннотации к namespace по которому определяется имя бизнес-коллоны
+  business_annotation_field_name: business.unit
+
+  # значение по умолчанию для создания LimitRange в namespace
+  default_limitrange:
+    metadata:
+      name: cap-limitrange
+    spec:
+      limits:
+      - default:
+          memory: 128Mi
+          cpu: 100m
+        defaultRequest:
+          memory: 128Mi
+          cpu: 100m
+        type: "Container"
+
+# блок для подключения к prometheus
+prometheus:
+  addr: https://prometheus.example/
